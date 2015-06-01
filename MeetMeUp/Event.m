@@ -46,6 +46,26 @@
                            }];
 }
 
+- (void)fetchEventPhoto:(void (^)(UIImage *image))block {
+
+            NSURLRequest *imageReq = [NSURLRequest requestWithURL:self.photoURL];
+    
+            [NSURLConnection sendAsynchronousRequest:imageReq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+               dispatch_async(dispatch_get_main_queue(), ^{
+                   if (!connectionError) {
+
+                       UIImage *image = [UIImage imageWithData:data];
+                       block(image);
+                   }
+               });
+    
+    
+            }];
+            
+    
+
+}
+
 + (NSArray *)eventsFromArray:(NSArray *)incomingArray
 {
     NSMutableArray *newArray = [[NSMutableArray alloc] initWithCapacity:incomingArray.count];

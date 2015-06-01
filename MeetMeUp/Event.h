@@ -10,6 +10,7 @@
 
 #import "Comment.h"
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface Event : NSObject
 
@@ -30,6 +31,8 @@
 + (void)performSearchWithKeyword:(NSString *)keyword withCompletionBlock:(void(^)(NSArray *events))block;
 
 - (void)fetchComments:(void (^)(NSArray *comments))block;
+
+- (void)fetchEventPhoto:(void (^)(UIImage *image))block;
 
 
 
