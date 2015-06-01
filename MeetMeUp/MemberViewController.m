@@ -22,19 +22,9 @@
     [super viewDidLoad];
     self.photoImageView.alpha = 0;
 
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/member/%@?&sign=true&photo-host=public&page=20&key=202319351e53624c24b661e3f521916",self.memberID]];
-
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
-                             self.member = [[Member alloc]initWithDictionary:dict];
-                           }];
-
-
+    [Member fetchMember:self.memberID withCompletionBlock:^(Member *member) {
+        self.member = member;
+    }];
 }
 
 - (void)setMember:(Member *)member

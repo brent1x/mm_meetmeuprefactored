@@ -10,6 +10,7 @@
 #import "EventDetailViewController.h"
 #import "ViewController.h"
 
+
 @interface ViewController () <UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *searchBar;
@@ -23,31 +24,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self performSearchWithKeyword:@"mobile"];
-
-}
-
-- (void)performSearchWithKeyword:(NSString *)keyword
-{
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/open_events.json?zip=60604&text=%@&time=,1w&key=202319351e53624c24b661e3f521916",keyword]];
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-
-                               if (!connectionError) {
-                                   NSArray *jsonArray = [[NSJSONSerialization JSONObjectWithData:data
-                                                                                         options:NSJSONReadingAllowFragments
-                                                                                           error:nil] objectForKey:@"results"];
-
-
-                                   self.dataArray = [Event eventsFromArray:jsonArray];
-                                   [self.tableView reloadData];
-
-                               }
-                           }];
+    [Event performSearchWithKeyword:@"mobile" withCompletionBlock:^(NSArray *events) {
+        self.dataArray = events;
+        [self.tableView reloadData];
+    }];
 
 }
 
@@ -103,7 +83,12 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [self performSearchWithKeyword:searchBar.text];
+
+    [Event performSearchWithKeyword:searchBar.text withCompletionBlock:^(NSArray *events) {
+        self.dataArray = events;
+        [self.tableView reloadData];
+    }];
+
     [searchBar resignFirstResponder];
 }
 

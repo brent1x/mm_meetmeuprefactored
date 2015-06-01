@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Mobile Makers. All rights reserved.
 //
 
+// typedef void (^PerformSearchWithKeywordCompletionBlock)(NSArray *);
+
 #import "Comment.h"
 #import <Foundation/Foundation.h>
 
@@ -22,6 +24,9 @@
 @property (nonatomic, strong) NSArray *commentsArray;
 
 + (NSArray *)eventsFromArray:(NSArray *)incomingArray;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+
++ (void)performSearchWithKeyword:(NSString *)keyword withCompletionBlock:(void(^)(NSArray *events))block;
 
 @end

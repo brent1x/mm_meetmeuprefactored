@@ -19,6 +19,7 @@
 
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
++ (void)fetchMember:(NSString *)memberID withCompletionBlock:(void(^)(Member *member))block;
 
 
 @end

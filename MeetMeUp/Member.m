@@ -26,5 +26,18 @@
     return self;
 }
 
++ (void)fetchMember: (NSString *)memberID withCompletionBlock:(void(^)(Member *member))block {
 
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/member/%@?&sign=true&photo-host=public&page=20&key=202319351e53624c24b661e3f521916", memberID]];
+
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+
+                               block([[Member alloc]initWithDictionary:dict]);
+                           }];
+}
 @end
