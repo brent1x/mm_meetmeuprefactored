@@ -29,4 +29,8 @@
 
 + (void)performSearchWithKeyword:(NSString *)keyword withCompletionBlock:(void(^)(NSArray *events))block;
 
+- (void)fetchComments:(void (^)(NSArray *comments))block;
+
+
+
 @end

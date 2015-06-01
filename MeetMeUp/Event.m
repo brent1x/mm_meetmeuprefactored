@@ -17,7 +17,6 @@
     if (self) {
         
         self.name = dictionary[@"name"];
-
         self.eventID = dictionary[@"id"];
         self.RSVPCount = [NSString stringWithFormat:@"%@",dictionary[@"yes_rsvp_count"]];
         self.hostedBy = dictionary[@"group"][@"name"];
@@ -27,6 +26,24 @@
         self.photoURL = [NSURL URLWithString:dictionary[@"photo_url"]];
     }
     return self;
+}
+
+- (void)fetchComments:(void (^)(NSArray *comments))block {
+
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/event_comments?&sign=true&photo-host=public&event_id=%@&page=20&key=202319351e53624c24b661e3f521916", self.eventID]];
+
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+
+                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+
+                               NSArray *jsonArray = [dict objectForKey:@"results"];
+
+                               block([Comment objectsFromArray:jsonArray]);
+                           }];
 }
 
 + (NSArray *)eventsFromArray:(NSArray *)incomingArray
@@ -40,7 +57,6 @@
     }
     return newArray;
 }
-
 
 + (void)performSearchWithKeyword:(NSString *)keyword withCompletionBlock:(void(^)(NSArray *events))block {
 
