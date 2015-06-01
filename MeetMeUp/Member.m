@@ -18,10 +18,7 @@
         self.state = dictionary[@"state"];
         self.city = dictionary[@"city"];
         self.country = dictionary[@"country"];
-        
         self.photoURL = [NSURL URLWithString:dictionary[@"photo"][@"photo_link"]];
-        
-        
     }
     return self;
 }
@@ -40,4 +37,18 @@
                                block([[Member alloc]initWithDictionary:dict]);
                            }];
 }
+
+- (void)fetchMemberPhoto:(void (^)(UIImage *image))block {
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:self.photoURL] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        block([UIImage imageWithData:data]);
+    }];
+}
+
 @end
+
+
+
+
+
+
+

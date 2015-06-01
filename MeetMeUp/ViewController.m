@@ -28,7 +28,6 @@
         self.dataArray = events;
         [self.tableView reloadData];
     }];
-
 }
 
 #pragma mark - Tableview Methods
@@ -52,7 +51,7 @@
             [cell.imageView setImage:image];
             [cell layoutSubviews];
         }];
-    }else
+    } else
     {
        [cell.imageView setImage:[UIImage imageNamed:@"logo"]];
     }
